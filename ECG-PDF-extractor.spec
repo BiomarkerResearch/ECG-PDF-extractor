@@ -52,8 +52,7 @@ if sys.platform == "win32":
     exe = EXE(
         pyz,
         a.scripts,
-        a.binaries,
-        a.datas,
+        [],
         name="ECG-PDF-extractor",
         debug=False,
         bootloader_ignore_signals=False,
@@ -61,13 +60,22 @@ if sys.platform == "win32":
         upx=True,
         console=False,
         disable_windowed_traceback=False,
+        exclude_binaries=True,
+    )
+    coll = COLLECT(
+        exe,
+        a.binaries,
+        a.datas,
+        name="ECG-PDF-extractor",
+        strip=False,
+        upx=True,
+        upx_exclude=[],
     )
 elif sys.platform == "darwin":
     exe = EXE(
         pyz,
         a.scripts,
-        a.binaries,
-        a.datas,
+        [],
         name="ECG-PDF-extractor",
         debug=False,
         bootloader_ignore_signals=False,
@@ -75,6 +83,7 @@ elif sys.platform == "darwin":
         upx=True,
         console=False,
         disable_windowed_traceback=False,
+        exclude_binaries=True,
     )
     app = BUNDLE(
         exe,
@@ -90,8 +99,7 @@ else:
     exe = EXE(
         pyz,
         a.scripts,
-        a.binaries,
-        a.datas,
+        [],
         name="ECG-PDF-extractor",
         debug=False,
         bootloader_ignore_signals=False,
@@ -99,4 +107,14 @@ else:
         upx=True,
         console=False,
         disable_windowed_traceback=False,
+        exclude_binaries=True,
+    )
+    coll = COLLECT(
+        exe,
+        a.binaries,
+        a.datas,
+        name="ECG-PDF-extractor",
+        strip=False,
+        upx=True,
+        upx_exclude=[],
     )
