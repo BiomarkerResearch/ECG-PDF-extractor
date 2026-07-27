@@ -34,7 +34,6 @@ a = Analysis(
     runtime_hooks=[],
     excludes=[
         "tkinter",
-        "unittest",
         "pytest",
         "setuptools",
         "distutils",
