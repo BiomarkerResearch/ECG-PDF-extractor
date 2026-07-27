@@ -46,13 +46,14 @@ a = Analysis(
     noarchive=False,
 )
 
-pyz = PYZ(a.pure, a.binaries, a.datas, cipher=block_cipher)
+pyz = PYZ(a.pure, cipher=block_cipher)
 
 if sys.platform == "win32":
     exe = EXE(
         pyz,
         a.scripts,
-        [],
+        a.binaries,
+        a.datas,
         name="ECG-PDF-extractor",
         debug=False,
         bootloader_ignore_signals=False,
@@ -62,10 +63,21 @@ if sys.platform == "win32":
         disable_windowed_traceback=False,
     )
 elif sys.platform == "darwin":
-    app = BUNDLE(
+    exe = EXE(
         pyz,
         a.scripts,
-        [],
+        a.binaries,
+        a.datas,
+        name="ECG-PDF-extractor",
+        debug=False,
+        bootloader_ignore_signals=False,
+        strip=False,
+        upx=True,
+        console=False,
+        disable_windowed_traceback=False,
+    )
+    app = BUNDLE(
+        exe,
         name="ECG-PDF-extractor.app",
         icon=None,
         debug=False,
@@ -78,7 +90,8 @@ else:
     exe = EXE(
         pyz,
         a.scripts,
-        [],
+        a.binaries,
+        a.datas,
         name="ECG-PDF-extractor",
         debug=False,
         bootloader_ignore_signals=False,
