@@ -64,8 +64,8 @@ jobs:
       - name: Package Linux
         if: matrix.platform == 'linux'
         run: |
-          cd dist
-          zip -r ../${{ matrix.artifact_name }} ECG-PDF-extractor/
+          chmod +x dist/ECG-PDF-extractor
+          zip ${{ matrix.artifact_name }} dist/ECG-PDF-extractor
 
       - name: Package Windows
         if: matrix.platform == 'windows'
@@ -77,3 +77,10 @@ jobs:
         run: |
           cd dist
           zip -r ../${{ matrix.artifact_name }} ECG-PDF-extractor.app/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_name }}
+          retention-days: 14
