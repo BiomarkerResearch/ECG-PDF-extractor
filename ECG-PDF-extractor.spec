@@ -32,16 +32,7 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[
-        "tkinter",
-        "pytest",
-        "setuptools",
-        "distutils",
-        "email",
-        "http",
-        "xml",
-        "pydoc",
-    ],
+    excludes=["tkinter"],
     noarchive=False,
 )
 
