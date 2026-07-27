@@ -2,11 +2,9 @@
 """PyInstaller spec for ECG-PDF-extractor standalone builds."""
 
 import sys
-from pathlib import Path
 
 block_cipher = None
 
-base_dir = Path(__file__).resolve().parent
 datas = [
     ("config.ini", "."),
 ]
@@ -27,7 +25,7 @@ hidden_imports = [
 
 a = Analysis(
     ["ui.py"],
-    pathex=[str(base_dir)],
+    pathex=[],
     binaries=[],
     datas=datas,
     hiddenimports=hidden_imports,
