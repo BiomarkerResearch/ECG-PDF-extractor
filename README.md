@@ -46,7 +46,6 @@ Ready-to-use executables are built automatically by GitHub Actions and published
 |----------|----------|
 | Windows x86_64 | `ECG-PDF-extractor-windows-x86_64.zip` |
 | macOS Apple Silicon (arm64) | `ECG-PDF-extractor-macos-arm64.app.zip` |
-| macOS Intel (x86_64) | `ECG-PDF-extractor-macos-x86_64.app.zip` |
 | Linux x86_64 | `ECG-PDF-extractor-linux-x86_64.zip` |
 
 Download, unzip, and run — no Python installation required.
