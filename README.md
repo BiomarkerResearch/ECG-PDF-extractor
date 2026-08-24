@@ -108,6 +108,15 @@ runner = ExecutionRunner(
 records = runner.run()   # dict: record_id -> {"ecg_raw": {lead: [samples]}, "metadata": {...}, ...}
 ```
 
+### AI Agent Integration
+
+This repository ships agent-ready instructions: [`CLAUDE.md`](CLAUDE.md) provides
+project context and commands for coding agents, and
+[`skills/ecg-pdf-extractor/SKILL.md`](skills/ecg-pdf-extractor/SKILL.md)
+is a portable skill definition that lets Claude Code / opencode operate the extractor
+autonomously (setup, extraction on arbitrary folders, output verification, troubleshooting).
+Copy it into `.opencode/skills/` or `.claude/skills/` to install.
+
 ## Output Format
 
 For each processed PDF the extractor writes:
