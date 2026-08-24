@@ -1,3 +1,5 @@
+![GitHub Badge](https://img.shields.io/badge/github-ECG--PDF--Extractor-blue?logo=github) 
+
 # ECG-PDF-extractor
 
 This python tool extracts raw **12-lead ECG waveforms** and **clinical metadata** from PDF files produced by
