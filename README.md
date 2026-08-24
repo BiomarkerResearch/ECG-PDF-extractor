@@ -255,7 +255,7 @@ ECG-PDF-extractor/
 ## Limitations & Data-Quality Notes
 
 - **! Vector PDFs only !** Scanned/raster ECG printouts cannot be parsed (no OCR).
-- **Layout-sensitive parsing.** Extraction relies on the graphics-operator structure of specific device firmware/print layouts (Cardiosoft v6.x block indices, Schiller segment geometry). New firmware versions may require extractor updates — malformed ocuments fail loudly per file instead of producing silent garbage.
+- **Layout-sensitive parsing.** Extraction relies on the graphics-operator structure of specific device firmware/print layouts (Cardiosoft v6.x block indices, Schiller segment geometry). New firmware versions may require extractor updates — malformed documents fail loudly per file instead of producing silent garbage.
 - **Metadata locale.** Clinical-field regexes match German labels (`Herzfrequenz`, `Patienten-Nr.`, …); English-locale exports may leave fields empty.
 - **Fixed output rate.** Output is always 500 Hz; `seconds` controls coverage.
 - **Source fidelity.** Small inter-lead timing offsets present in some source documents (e.g., V1–V3 drawn ~16–36 ms late on certain Cardiosoft exports) are reproduced faithfully rather than corrected — the extractor does not second-guess the device.
