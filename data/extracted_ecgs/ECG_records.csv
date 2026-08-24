@@ -1,0 +1,4 @@
+filename,patient_id,name,ecg_date,ecg_time,sex,age,birth_date,ethnicity,speed_mm_s,duration,available_leads,heart_rate,p_duration_ms,pq_ms,qrs_ms,qt_ms,qtc_ms,rr_interval_ms,pp_interval_ms,p_axis,qrs_axis,t_axis,software_version,device_model,device_serial
+1282423_20210205_133933.pdf,1282423,test testmann,05.02.2021,13:39:33,male,20,01.01.2001,Weiss,25,10s,"I,II,III,aVR,aVL,aVF",63,108,170,94,362,373,948,,53,48,40,,AT‑102P,SCM 125
+3b7b4dc1-d17e-403e-949f-b0c6a3693447.pdf,1247165,"Testigel, Testvorname",29.04.2025,8:28:13,male,75,,,50,3*5s,"I,II,III,aVR,aVL,aVF",55,120,190,100,408,390,1082,1090.0,66,86,23,6.73,,
+testmannCardiosoft.pdf,1282423,"testmann, test",05.02.2021,13:36:10,female,20,,,50,3*5s,"I,II,III,aVR,aVL,aVF",75,110,158,100,366,408,804,800.0,68,69,60,6.73,,
