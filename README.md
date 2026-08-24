@@ -1,4 +1,4 @@
-[![GitHub ECG-PDF-Extractor](https://img.shields.io/badge/github-ECG--PDF--Extractor-blue?logo=github)](https://github.com/BiomarkerResearch/ECG-PDF-extractor) 
+[![GitHub ECG-PDF-Extractor](https://img.shields.io/badge/github-ECG--PDF--Extractor-blue?logo=github)](https://github.com/BiomarkerResearch/ECG-PDF-extractor)  [![Python](https://img.shields.io/badge/Python-100_%25-blue?logo=python&logoColor=fff)](#)
 
 # ECG-PDF-extractor
 
