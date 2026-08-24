@@ -1,0 +1,84 @@
+name: Build Executables
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            platform: linux
+            arch: x86_64
+            ext: ""
+            artifact_name: ECG-PDF-extractor-linux-x86_64.zip
+          - os: windows-latest
+            platform: windows
+            arch: x86_64
+            ext: ".exe"
+            artifact_name: ECG-PDF-extractor-windows-x86_64.zip
+          - os: macos-13
+            platform: macos
+            arch: x86_64
+            ext: ""
+            artifact_name: ECG-PDF-extractor-macos-x86_64.app.zip
+          - os: macos-latest
+            platform: macos-arm64
+            arch: arm64
+            ext: ""
+            artifact_name: ECG-PDF-extractor-macos-arm64.app.zip
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies (Linux)
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update && sudo apt-get install -y \
+            libgl1 libegl1 libxcb-xinerama0
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Install dependencies (Windows/macOS)
+        if: matrix.platform != 'linux'
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build executable
+        run: pyinstaller ECG-PDF-extractor.spec
+
+      - name: Package Linux
+        if: matrix.platform == 'linux'
+        run: |
+          cd dist
+          chmod +x ECG-PDF-extractor/ECG-PDF-extractor
+          zip -r ../${{ matrix.artifact_name }} ECG-PDF-extractor/
+
+      - name: Package Windows
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: Compress-Archive -Path "dist\ECG-PDF-extractor" -DestinationPath "${{ matrix.artifact_name }}"
+
+      - name: Package macOS
+        if: startsWith(matrix.platform, 'macos')
+        run: |
+          cd dist
+          zip -r ../${{ matrix.artifact_name }} ECG-PDF-extractor.app/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_name }}
+          retention-days: 14
