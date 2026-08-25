@@ -28,6 +28,7 @@ The present **ECG-PDF-extractor** uses code from the initially published researc
   - [Desktop App (GUI)](#desktop-app-gui)
   - [Command Line](#command-line)
   - [Python API](#python-api)
+  - [AI Agent Integration](#ai-agent-integration)
 - [Output Format](#output-format)
 - [How It Works](#how-it-works)
 - [Technical Stack](#technical-stack)
