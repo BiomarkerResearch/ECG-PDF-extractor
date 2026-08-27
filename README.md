@@ -14,9 +14,9 @@ ECG PDF (Cardiosoft / Schiller)  ──►  12-lead waveform CSVs (µV, 500 Hz) 
 
 ---
 
-This tool is based on our project "A data-pipeline processing electrocardiogram recordings for use in artificial intelligence algorithms" (Authors: J. Prim , T. Uhlemann , N. Gumpfer , D. Gruen , S. Wegener , S. Krug , J. Hannig , T. Keller , M. Guckert) presented at the ESC 2021 ([DOI: 10.1093/eurheartj/ehab724.3041ESC2021](https://doi.org/10.1093/eurheartj/ehab724.3041)). 
+This tool is based on our project "A data-pipeline processing electrocardiogram recordings for use in artificial intelligence algorithms" (Authors: J. Prim, T. Uhlemann, N. Gumpfer, D. Gruen, S. Wegener, S. Krug, J. Hannig, T. Keller, M. Guckert) presented at the ESC 2021 ([DOI: 10.1093/eurheartj/ehab724.3041ESC2021](https://doi.org/10.1093/eurheartj/ehab724.3041)). 
 
-The present **ECG-PDF-extractor** uses code from the initially published research pipeline tool **ECG-Pipeline** ([GitHub Repo](https://github.com/JoshPrim/ECG-Pipeline)) by Joshua Prim. The new **ECG-PDF-extractor** within the current repository is a substantial rework including modern Python usage, PDF-only input, automatic manufacturer detection, clinical meta-data extraction, dynamic calibration, improved signal processing, and an added cross-platform desktop app (GUI).
+The **ECG-PDF-extractor** uses code from the initially published research pipeline tool **ECG-Pipeline** ([GitHub Repo](https://github.com/JoshPrim/ECG-Pipeline)) by Joshua Prim. The **ECG-PDF-extractor** within the current repository is a substantial rework including modern Python usage, PDF-only input, automatic manufacturer detection, clinical meta-data extraction, dynamic calibration, improved signal processing, and an added cross-platform desktop app (GUI).
 
 ---
 
@@ -24,12 +24,12 @@ The present **ECG-PDF-extractor** uses code from the initially published researc
 
 - [Downloads](#downloads)
 - [Features](#features)
+- [Output Format](#output-format)
 - [Quick Start](#quick-start)
   - [Desktop App (GUI)](#desktop-app-gui)
   - [Command Line](#command-line)
   - [Python API](#python-api)
   - [AI Agent Integration](#ai-agent-integration)
-- [Output Format](#output-format)
 - [How It Works](#how-it-works)
 - [Technical Stack](#technical-stack)
 - [Configuration](#configuration)
@@ -65,6 +65,41 @@ Builds are produced with PyInstaller.
 - **Clinical metadata extraction** — heart rate, P/QRS/QT intervals, axes, patient ID, sex, age, dates, device info parsed from the PDF text layer into a consolidated table
 - **Cross-platform desktop GUI** — app with live progress, manufacturer detection counts, and a built-in 12-lead waveform viewer
 - **Signal processing pipeline** — preamble-artifact removal, shape-preserving Akima spline interpolation, Savitzky-Golay smoothing, cross-lead time-window alignment, baseline correction
+
+## Output Format
+
+For each processed PDF the extractor writes:
+
+**1. One waveform CSV per recording** (`<pdf-name>.csv`) — 5000 rows × 12 columns
+(one column per lead, header = lead names):
+
+```csv
+I,II,III,aVR,aVL,aVF,V1,V2,V3,V4,V5,V6
+58.90665054,57.37796329,8.74510367,-60.98782341,...
+55.02543565,52.05139212,6.72813761,-55.61165769,...
+...
+```
+
+Rows are equidistant time samples at 500 Hz; values are calibrated amplitudes in
+**microvolts (µV)**, baseline-corrected.
+
+**2. A consolidated metadata table** (`ECG_records.csv`) — one row per PDF with all
+extracted clinical parameters:
+
+<details>
+<summary>All 26 columns</summary>
+
+`filename`, `patient_id`, `name`, `ecg_date`, `ecg_time`, `sex`, `age`, `birth_date`,
+`ethnicity`, `speed_mm_s`, `duration`, `available_leads`, `heart_rate`,
+`p_duration_ms`, `pq_ms`, `qrs_ms`, `qt_ms`, `qtc_ms`, `rr_interval_ms`,
+`pp_interval_ms`, `p_axis`, `qrs_axis`, `t_axis`, `software_version`,
+`device_model`, `device_serial`
+
+</details>
+
+Fields not present in a given document remain empty. ⚠️ Note that name/patient ID/date of birth are
+**personal health information** — handle outputs accordingly.
+
 
 ## Quick Start
 
@@ -120,39 +155,6 @@ is a portable skill definition that lets Claude Code / opencode operate the extr
 autonomously (setup, extraction on arbitrary folders, output verification, troubleshooting).
 Copy it into `.opencode/skills/` or `.claude/skills/` to install.
 
-## Output Format
-
-For each processed PDF the extractor writes:
-
-**1. One waveform CSV per recording** (`<pdf-name>.csv`) — 5000 rows × 12 columns
-(one column per lead, header = lead names):
-
-```csv
-I,II,III,aVR,aVL,aVF,V1,V2,V3,V4,V5,V6
-58.90665054,57.37796329,8.74510367,-60.98782341,...
-55.02543565,52.05139212,6.72813761,-55.61165769,...
-...
-```
-
-Rows are equidistant time samples at 500 Hz; values are calibrated amplitudes in
-**microvolts (µV)**, baseline-corrected.
-
-**2. A consolidated metadata table** (`ECG_records.csv`) — one row per PDF with all
-extracted clinical parameters:
-
-<details>
-<summary>All 26 columns</summary>
-
-`filename`, `patient_id`, `name`, `ecg_date`, `ecg_time`, `sex`, `age`, `birth_date`,
-`ethnicity`, `speed_mm_s`, `duration`, `available_leads`, `heart_rate`,
-`p_duration_ms`, `pq_ms`, `qrs_ms`, `qt_ms`, `qtc_ms`, `rr_interval_ms`,
-`pp_interval_ms`, `p_axis`, `qrs_axis`, `t_axis`, `software_version`,
-`device_model`, `device_serial`
-
-</details>
-
-Fields not present in a given document remain empty. ⚠️ Note that name/patient ID are
-**personal health information** — handle outputs accordingly.
 
 ## How It Works
 
@@ -270,7 +272,6 @@ ECG-PDF-extractor/
 - **Layout-sensitive parsing.** Extraction relies on the graphics-operator structure of specific device firmware/print layouts (Cardiosoft v6.x block indices, Schiller segment geometry). New firmware versions may require extractor updates — malformed documents fail loudly per file instead of producing silent garbage.
 - **Metadata locale.** Clinical-field regexes match German labels (`Herzfrequenz`, `Patienten-Nr.`, …); English-locale exports may leave fields empty.
 - **Fixed output rate.** Output is always 500 Hz; `seconds` controls coverage.
-- **Source fidelity.** Small inter-lead timing offsets present in some source documents (e.g., V1–V3 drawn ~16–36 ms late on certain Cardiosoft exports) are reproduced faithfully rather than corrected — the extractor does not second-guess the device.
 
 ## License
 
